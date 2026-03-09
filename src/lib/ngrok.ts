@@ -111,6 +111,8 @@ function normalizeRequest(r: NgrokCapturedRequest): GraphQLRequest | null {
   const gql = parseGraphQLBody(r.request.raw);
   if (!gql) return null;
 
+  const responseBody = r.response ? extractHttpBody(r.response.raw) : null;
+
   return {
     id: r.id,
     operationType: gql.operationType,
@@ -119,6 +121,7 @@ function normalizeRequest(r: NgrokCapturedRequest): GraphQLRequest | null {
     statusCode: r.response?.status_code ?? 0,
     latencyMs: Math.round(r.duration / 1_000_000),
     timestamp: new Date(r.start),
+    responseBody,
   };
 }
 

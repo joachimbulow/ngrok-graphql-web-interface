@@ -8,6 +8,7 @@ interface RequestListProps {
   isFetching: boolean;
   selectedId: string | null;
   showVariables: boolean;
+  showResponse: boolean;
   onSelect: (request: GraphQLRequest) => void;
 }
 
@@ -16,6 +17,7 @@ export function RequestList({
   isFetching,
   selectedId,
   showVariables,
+  showResponse,
   onSelect,
 }: RequestListProps) {
   if (isFetching && requests.length === 0) {
@@ -50,6 +52,7 @@ export function RequestList({
             request={request}
             selected={request.id === selectedId}
             showVariables={showVariables}
+            showResponse={showResponse}
             onClick={() => onSelect(request)}
           />
         ))}

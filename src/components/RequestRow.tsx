@@ -14,16 +14,33 @@ interface RequestRowProps {
   request: GraphQLRequest;
   selected: boolean;
   showVariables: boolean;
+  showResponse: boolean;
   onClick: () => void;
+}
+
+function isError(statusCode: number) {
+  return statusCode >= 400 || statusCode === 0;
+}
+
+function formatBody(raw: string | null): string | null {
+  if (!raw || !raw.trim()) return null;
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2);
+  } catch {
+    return raw;
+  }
 }
 
 export function RequestRow({
   request,
   selected,
   showVariables,
+  showResponse,
   onClick,
 }: RequestRowProps) {
   const [replayState, setReplayState] = useState<ReplayState>("idle");
+
+  const error = isError(request.statusCode);
 
   const latency =
     request.latencyMs >= 1000
@@ -32,6 +49,8 @@ export function RequestRow({
 
   const hasVariables =
     request.variables !== null && Object.keys(request.variables).length > 0;
+
+  const formattedResponse = formatBody(request.responseBody);
 
   async function handleReplay(e: React.MouseEvent) {
     e.stopPropagation();
@@ -50,8 +69,17 @@ export function RequestRow({
     <div
       onClick={onClick}
       className={cn(
-        "w-full text-left px-4 py-3 border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors cursor-pointer",
-        selected && "bg-zinc-800 border-l-2 border-l-blue-500"
+        "w-full text-left px-4 py-3 border-b transition-colors cursor-pointer border-l-2",
+        // base border colours
+        error
+          ? "border-b-zinc-800 border-l-red-500/60"
+          : "border-b-zinc-800 border-l-transparent",
+        // background tint
+        error && !selected && "bg-red-950/20 hover:bg-red-950/30",
+        !error && !selected && "hover:bg-zinc-800/50",
+        // selected overrides
+        selected && error && "bg-red-950/40 border-l-red-400",
+        selected && !error && "bg-zinc-800 border-l-blue-500"
       )}
     >
       <div className="flex items-start gap-3">
@@ -84,9 +112,7 @@ export function RequestRow({
               replayState === "idle" && "text-zinc-600 hover:text-zinc-300"
             )}
           >
-            {replayState === "loading" && (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            )}
+            {replayState === "loading" && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {replayState === "done" && <Check className="h-3.5 w-3.5" />}
             {replayState === "error" && <X className="h-3.5 w-3.5" />}
             {replayState === "idle" && <RotateCcw className="h-3.5 w-3.5" />}
@@ -105,6 +131,27 @@ export function RequestRow({
       {showVariables && !hasVariables && (
         <p className="mt-1.5 ml-[calc(theme(spacing.3)+4.5rem)] text-xs text-zinc-600 italic">
           no variables
+        </p>
+      )}
+
+      {showResponse && formattedResponse !== null && (
+        <div className="mt-2 ml-[calc(theme(spacing.3)+4.5rem)]">
+          <pre
+            className={cn(
+              "rounded-md border px-3 py-2 text-xs overflow-auto max-h-40 font-mono whitespace-pre-wrap break-all",
+              error
+                ? "bg-red-950/30 border-red-900/50 text-red-300"
+                : "bg-zinc-900 border-zinc-800 text-zinc-400"
+            )}
+          >
+            {formattedResponse}
+          </pre>
+        </div>
+      )}
+
+      {showResponse && formattedResponse === null && (
+        <p className="mt-1.5 ml-[calc(theme(spacing.3)+4.5rem)] text-xs text-zinc-600 italic">
+          no response yet
         </p>
       )}
     </div>

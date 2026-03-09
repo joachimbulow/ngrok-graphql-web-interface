@@ -8,6 +8,7 @@ export interface GraphQLRequest {
   statusCode: number;
   latencyMs: number;
   timestamp: Date;
+  responseBody: string | null;
 }
 
 export interface GraphQLRequestDetail extends GraphQLRequest {
