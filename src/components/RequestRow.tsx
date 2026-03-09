@@ -63,6 +63,7 @@ export function RequestRow({
       onClick={onClick}
       className={cn(
         "w-full text-left px-4 py-3 border-b transition-colors cursor-pointer border-l-2",
+        "animate-in fade-in-0 slide-in-from-top-2 duration-200",
         // base border colours
         error
           ? "border-b-zinc-800 border-l-red-500/60"
