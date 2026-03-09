@@ -13,7 +13,7 @@ interface VariablesPanelProps {
 }
 
 export function VariablesPanel({ variables, className }: VariablesPanelProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   if (!variables || Object.keys(variables).length === 0) {
     return (
