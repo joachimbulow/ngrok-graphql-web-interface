@@ -1,4 +1,4 @@
-q# Better ngrok GQL web interface
+# A way better Ngrok GraphQL web interface
 The default ngrok web interface sucks for GraphQL. Everything is `POST /graphql` with no extra info.
 
 This vite-based react UI shows you request types, variables, allows replaying requests, and introspection out of the box.
