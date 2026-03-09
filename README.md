@@ -14,7 +14,10 @@ And more - in a 20x for a 10x more streamlined experience
 
 100% vibe coded.
 
-Just download and do `npm run dev` and navigate to `localhost:5731`.
+## Getting started
+
+1. Git clone this repository
+2. `npm run dev` and navigate to `localhost:5731`
 
 You probably want to add this to any alias you use for booting up ngrok or otherwise.
 
