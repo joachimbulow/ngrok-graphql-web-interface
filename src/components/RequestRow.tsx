@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { RotateCcw, Loader2, Check, X } from "lucide-react";
 import { OperationBadge } from "./OperationBadge";
 import { StatusBadge } from "./StatusBadge";
+import { JsonViewer } from "./JsonViewer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { replayRequest } from "@/lib/ngrok";
@@ -22,14 +23,6 @@ function isError(statusCode: number) {
   return statusCode >= 400 || statusCode === 0;
 }
 
-function formatBody(raw: string | null): string | null {
-  if (!raw || !raw.trim()) return null;
-  try {
-    return JSON.stringify(JSON.parse(raw), null, 2);
-  } catch {
-    return raw;
-  }
-}
 
 export function RequestRow({
   request,
@@ -50,7 +43,7 @@ export function RequestRow({
   const hasVariables =
     request.variables !== null && Object.keys(request.variables).length > 0;
 
-  const formattedResponse = formatBody(request.responseBody);
+  const responseBody = request.responseBody?.trim() || null;
 
   async function handleReplay(e: React.MouseEvent) {
     e.stopPropagation();
@@ -122,9 +115,7 @@ export function RequestRow({
 
       {showVariables && hasVariables && (
         <div className="mt-2 ml-[calc(theme(spacing.3)+4.5rem)]">
-          <pre className="rounded-md bg-zinc-900 border border-zinc-800 px-3 py-2 text-xs text-zinc-400 overflow-auto max-h-40 font-mono whitespace-pre-wrap break-all">
-            {JSON.stringify(request.variables, null, 2)}
-          </pre>
+          <JsonViewer value={request.variables} className="max-h-40" />
         </div>
       )}
 
@@ -134,22 +125,19 @@ export function RequestRow({
         </p>
       )}
 
-      {showResponse && formattedResponse !== null && (
+      {showResponse && responseBody !== null && (
         <div className="mt-2 ml-[calc(theme(spacing.3)+4.5rem)]">
-          <pre
+          <JsonViewer
+            raw={responseBody}
             className={cn(
-              "rounded-md border px-3 py-2 text-xs overflow-auto max-h-40 font-mono whitespace-pre-wrap break-all",
-              error
-                ? "bg-red-950/30 border-red-900/50 text-red-300"
-                : "bg-zinc-900 border-zinc-800 text-zinc-400"
+              "max-h-40",
+              error && "bg-red-950/30 border-red-900/50 [&_span.text-emerald-400]:text-red-300 [&_span.text-sky-400]:text-red-300"
             )}
-          >
-            {formattedResponse}
-          </pre>
+          />
         </div>
       )}
 
-      {showResponse && formattedResponse === null && (
+      {showResponse && responseBody === null && (
         <p className="mt-1.5 ml-[calc(theme(spacing.3)+4.5rem)] text-xs text-zinc-600 italic">
           no response yet
         </p>

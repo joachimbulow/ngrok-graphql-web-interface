@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import { Toolbar } from "@/components/Toolbar";
@@ -73,6 +74,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Inspector />
+        <Toaster theme="dark" richColors />
       </TooltipProvider>
     </QueryClientProvider>
   );

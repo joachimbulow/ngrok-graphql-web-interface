@@ -18,6 +18,7 @@ import {
 import { OperationBadge } from "./OperationBadge";
 import { StatusBadge } from "./StatusBadge";
 import { VariablesPanel } from "./VariablesPanel";
+import { JsonViewer } from "./JsonViewer";
 import { useRequestDetail } from "@/hooks/useRequestDetail";
 import { replayRequest } from "@/lib/ngrok";
 import type { GraphQLRequest } from "@/lib/types";
@@ -75,20 +76,6 @@ function HeadersTable({ headers }: { headers: Record<string, string> }) {
   );
 }
 
-function JsonBlock({ value }: { value: string }) {
-  if (!value.trim()) return <p className="text-xs text-zinc-500 italic">empty</p>;
-  let formatted = value;
-  try {
-    formatted = JSON.stringify(JSON.parse(value), null, 2);
-  } catch {
-    // leave as-is if not valid JSON
-  }
-  return (
-    <pre className="rounded-md bg-zinc-900 border border-zinc-800 p-3 text-xs text-zinc-300 overflow-auto max-h-80 font-mono whitespace-pre-wrap break-all">
-      {formatted}
-    </pre>
-  );
-}
 
 export function DetailSheet({ request, onClose }: DetailSheetProps) {
   const { data: detail, isLoading } = useRequestDetail(request?.id ?? null);
@@ -196,7 +183,7 @@ export function DetailSheet({ request, onClose }: DetailSheetProps) {
                       Loading…
                     </div>
                   ) : (
-                    <JsonBlock value={detail?.requestBody ?? ""} />
+                    <JsonViewer raw={detail?.requestBody ?? ""} className="max-h-80" />
                   )}
                 </section>
 
@@ -234,7 +221,7 @@ export function DetailSheet({ request, onClose }: DetailSheetProps) {
                       Loading…
                     </div>
                   ) : (
-                    <JsonBlock value={detail?.responseBody ?? ""} />
+                    <JsonViewer raw={detail?.responseBody ?? ""} className="max-h-80" />
                   )}
                 </section>
 
