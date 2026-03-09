@@ -20,7 +20,8 @@ You probably want to add this to any alias you use for booting up ngrok or other
 
 ## Example
 
-<img width="1494" height="1081" alt="image" src="https://github.com/user-attachments/assets/63281a25-6228-4d79-b158-8cd6ead4b273" />
+<img width="888" height="839" alt="image" src="https://github.com/user-attachments/assets/9c3c5896-5585-40ba-ad15-b9df92bc3db8" />
+
 
 
 
