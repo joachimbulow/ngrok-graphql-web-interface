@@ -21,6 +21,8 @@ And more - in a 20x for a 10x more streamlined experience
 
 You probably want to add this to any alias you use for booting up ngrok or otherwise.
 
+E.g. `alias -g dngrok="cd ~/Development/ngrok-graphql-web-interface && npm run dev"`
+
 ## Example
 
 <img width="888" height="839" alt="image" src="https://github.com/user-attachments/assets/9c3c5896-5585-40ba-ad15-b9df92bc3db8" />
